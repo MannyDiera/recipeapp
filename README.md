@@ -1,6 +1,8 @@
-# learning
+# Recipe App 
 
-## Project setup
+## Recipe application written in Vue for the JS Alpharetta meetup
+
+### Project setup
 ```
 npm install
 ```
