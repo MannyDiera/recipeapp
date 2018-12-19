@@ -3,33 +3,40 @@
     <h1>{{ message }} </h1>
     <br/>
 
-    <h2>Enter max calorie amount to see results.</h2>
-    <input type="number" v-model.number="maxCal" placeholder="Enter as 603, 700, etc ">
+    <input type="number" v-model.number="maxCal" placeholder="Filter by Calories">
 
-    <ul class="list" v-if="maxCal >= 1">
+    <ul class="list" v-if="filteredRecipes.length">
       <RecipeItem
-        v-for="recipe in recipes"
-        v-if="recipe.calories < maxCal"
+        v-for="recipe in filteredRecipes"
         :key="recipe.name"
         :recipe="recipe"
-        @show-calorie="showCalories"
+        @show-details="showDetails"
       />
     </ul>
+      <SimpleModal v-if="displaySelected" @close-modal="closeModal">
+        <SelectedRecipe :recipe="selectedRecipe" />
+      </SimpleModal>
   </div>
 </template>
 
 <script>
-import RecipeItem from './RecipeItem.vue'
+import RecipeItem from './RecipeItem.vue';
+import SelectedRecipe from './SelectedRecipe.vue';
+import SimpleModal from './SimpleModal.vue';
 
 export default {
   name: 'recipe-list',
   components: {
     RecipeItem,
+    SelectedRecipe,
+    SimpleModal,
   },
   data() {
     return {
       message: 'Recipes ',
       maxCal: null,
+      displaySelected: false,
+      selectedRecipe: {},
       recipes: [
         {name:'lasagna', calories: 500, show: false},
         {name:'ceviche', calories: 602, show: false},
@@ -39,11 +46,29 @@ export default {
     };
   },
   methods: {
+    closeModal() {
+      Object.assign(this, {
+        selectedRecipe: {},
+        displaySelected: false,
+      });
+    },
+    showDetails(recipe) {
+      Object.assign(this, {
+        selectedRecipe: recipe,
+        displaySelected: true,
+      })
+    },
     showCalories (recipe) {
       recipe.show = !recipe.show
-    }
+    },
   },
-  computed: { },
+  computed: {
+    filteredRecipes() {
+      if (this.maxCal <= 0)
+        return this.recipes;
+      return this.recipes.filter(r => r.calories <= this.maxCal);
+    },
+  },
 }
 </script>
 
