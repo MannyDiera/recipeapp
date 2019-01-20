@@ -1,9 +1,13 @@
 <template>
-  <li>
-    <h2>{{recipe.label}}</h2>
-    <span>{{recipe.calories | addCals}}</span>
-    <img :src="recipe.image" class="tn" />
-    <button @click="showDetails">Show Details</button>
+  <li class="summary-card">
+    <div class="tn">
+      <img :src="recipe.image" />
+    </div>
+    <div class="recipe-meta">
+      <h2>{{recipe.label}}</h2>
+      <p>{{recipe.calories | addCals}}</p>
+      <button @click="showDetails">Show Details</button>
+    </div>
   </li>
 </template>
 
@@ -30,7 +34,33 @@ export default {
 </script>
 
 <style>
-  .tn {
-    width: 100px;
-  }
+button {
+  cursor: pointer;
+}
+
+.summary-card {
+  display: flex;
+}
+
+.tn {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.tn img {
+  max-height: 200px;
+  margin: auto;
+}
+
+.recipe-meta {
+  flex-grow: 1;
+  padding-left: 20px;
+  text-align: right;
+}
+
+.recipe-meta h2 {
+  text-align: left;
+  color: #009688;
+  font-weight: bold;
+}
 </style>
