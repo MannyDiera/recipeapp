@@ -1,6 +1,8 @@
 <template>
   <li>
-    <h2>{{recipe.name}}</h2>
+    <h2>{{recipe.label}}</h2>
+    <span>{{recipe.calories | addCals}}</span>
+    <img :src="recipe.image" class="tn" />
     <button @click="showDetails">Show Details</button>
   </li>
 </template>
@@ -16,7 +18,7 @@ export default {
   },
   filters: {
     addCals: function(calories) {
-      return calories + ' calories';
+      return calories.toFixed(0) + ' calories';
     },
   },
   methods: {
@@ -26,3 +28,9 @@ export default {
   },
 };
 </script>
+
+<style>
+  .tn {
+    width: 100px;
+  }
+</style>

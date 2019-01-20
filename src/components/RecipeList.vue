@@ -5,6 +5,10 @@
 
     <input type="number" v-model.number="maxCal" placeholder="Filter by Calories">
 
+    <input type="text" v-model.trim="searchTerm" placeholder="Search term">
+    <button :disabled="!searchTerm.length"
+      @click="search">search</button>
+
     <ul class="list" v-if="filteredRecipes.length">
       <RecipeItem
         v-for="recipe in filteredRecipes"
@@ -13,9 +17,9 @@
         @show-details="showDetails"
       />
     </ul>
-      <SimpleModal v-if="displaySelected" @close-modal="closeModal">
-        <SelectedRecipe :recipe="selectedRecipe" />
-      </SimpleModal>
+    <SimpleModal v-if="displaySelected" @close-modal="closeModal">
+      <SelectedRecipe :recipe="selectedRecipe" />
+    </SimpleModal>
   </div>
 </template>
 
@@ -23,6 +27,7 @@
 import RecipeItem from './RecipeItem.vue';
 import SelectedRecipe from './SelectedRecipe.vue';
 import SimpleModal from './SimpleModal.vue';
+import edamamClient from '../edamamClient';
 
 export default {
   name: 'recipe-list',
@@ -33,16 +38,14 @@ export default {
   },
   data() {
     return {
+      loading: false,
       message: 'Recipes ',
       maxCal: null,
       displaySelected: false,
       selectedRecipe: {},
-      recipes: [
-        {name:'lasagna', calories: 500, show: false},
-        {name:'ceviche', calories: 602, show: false},
-        {name:'pasta', calories: 698, show: false},
-        {name:'pizza', calories: 807, show: false},
-      ],
+      searchTerm: '',
+      searchResults: [],
+      savedRecipes: [],
     };
   },
   methods: {
@@ -58,15 +61,26 @@ export default {
         displaySelected: true,
       })
     },
+    search() {
+      this.loading = true;
+      edamamClient.search(this.searchTerm)
+        .then(data => {
+          this.searchResults = data.hits.map(x => x.recipe);
+          this.loading = false;
+        });
+    },
     showCalories (recipe) {
       recipe.show = !recipe.show
     },
   },
   computed: {
+    displayedRecipes() {
+      return this.searchResults.length ? this.searchResults : this.savedRecipes;
+    },
     filteredRecipes() {
       if (this.maxCal <= 0)
-        return this.recipes;
-      return this.recipes.filter(r => r.calories <= this.maxCal);
+        return this.displayedRecipes;
+      return this.displayedRecipes.filter(r => r.calories <= this.maxCal);
     },
   },
 }
