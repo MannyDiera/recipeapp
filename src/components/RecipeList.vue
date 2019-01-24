@@ -69,9 +69,6 @@ export default {
           this.loading = false;
         });
     },
-    showCalories (recipe) {
-      recipe.show = !recipe.show
-    },
   },
   computed: {
     displayedRecipes() {
