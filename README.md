@@ -1,10 +1,17 @@
-# Recipe App 
+# Recipe App
 
 ## Recipe application written in Vue for the JS Alpharetta meetup
 
 ### Project setup
 ```
 npm install
+```
+
+Add edamam API credentials to .env file
+
+```
+  VUE_APP_EDAMAM_ID=""
+  VUE_APP_EDAMAM_KEY=""
 ```
 
 ### Compiles and hot-reloads for development
