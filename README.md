@@ -2,7 +2,7 @@
 
 ## Recipe application written in Vue for the JS Alpharetta meetup
 ### This is the application to clone and code along in the meetup. 
-### The other repository 'Recipe App (Done)' is what the end result will be after each meetup. 
+### The other repository 'recipeapp-done' is what the end result will be after each meetup. 
 
 ### Project setup
 ```
